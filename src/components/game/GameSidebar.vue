@@ -6,6 +6,7 @@ import type {
   GameSettings,
   GameSnapshot
 } from '../../types/go'
+import type { SoundPreference } from '../../composables/useGameSound'
 import type { ThemePreference } from '../../composables/useTheme'
 
 const props = defineProps<{
@@ -17,6 +18,7 @@ const props = defineProps<{
   sgfMoveIndex: number
   isVariation: boolean
   themePreference: ThemePreference
+  soundPreference: SoundPreference
 }>()
 
 const emit = defineEmits<{
@@ -34,6 +36,7 @@ const emit = defineEmits<{
   returnToSgfGame: []
   showResult: []
   updateTheme: [preference: ThemePreference]
+  updateSound: [preference: SoundPreference]
 }>()
 
 const themeOptions: ReadonlyArray<{
@@ -43,6 +46,19 @@ const themeOptions: ReadonlyArray<{
   { value: 'light', label: '浅色' },
   { value: 'dark', label: '深色' },
   { value: 'system', label: '系统' }
+]
+
+const soundOptions: ReadonlyArray<{
+  value: SoundPreference
+  label: string
+}> = [
+  { value: 'random', label: '随机' },
+  { value: 'stone1', label: '落子声 1' },
+  { value: 'stone2', label: '落子声 2' },
+  { value: 'stone3', label: '落子声 3' },
+  { value: 'stone4', label: '落子声 4' },
+  { value: 'stone5', label: '落子声 5' },
+  { value: 'off', label: '关闭' }
 ]
 
 const phaseLabel = computed(() => {
@@ -80,6 +96,10 @@ const currentMoveLabel = computed(() => {
 
 function handleSgfMoveInput(event: Event): void {
   emit('goToSgfMove', Number((event.target as HTMLInputElement).value))
+}
+
+function handleSoundInput(event: Event): void {
+  emit('updateSound', (event.target as HTMLSelectElement).value as SoundPreference)
 }
 
 function toCoordinate(x: number, y: number): string {
@@ -302,6 +322,24 @@ function toCoordinate(x: number, y: number): string {
           {{ option.label }}
         </button>
       </div>
+    </section>
+
+    <section class="theme-switcher">
+      <span>对局音效</span>
+      <select
+        class="sound-select focus-ring"
+        :value="soundPreference"
+        aria-label="选择落子音效"
+        @change="handleSoundInput"
+      >
+        <option
+          v-for="option in soundOptions"
+          :key="option.value"
+          :value="option.value"
+        >
+          {{ option.label }}
+        </option>
+      </select>
     </section>
 
     <footer class="sidebar-footer">
@@ -659,6 +697,17 @@ function toCoordinate(x: number, y: number): string {
   gap: 1px;
   width: 156px;
   background: var(--color-border);
+}
+
+.sound-select {
+  width: 156px;
+  border: 1px solid var(--color-border);
+  border-radius: 0;
+  background: var(--background-quiet-action);
+  padding: 7px 8px;
+  color: var(--color-text-muted);
+  font-size: 9px;
+  letter-spacing: 0.08em;
 }
 
 .theme-option {

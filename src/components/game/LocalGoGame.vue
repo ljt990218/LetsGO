@@ -4,7 +4,11 @@ import {
   shallowRef,
   useTemplateRef
 } from 'vue'
-import type { GameSettings } from '../../types/go'
+import type {
+  BoardPoint,
+  GameSettings
+} from '../../types/go'
+import { useGameSound } from '../../composables/useGameSound'
 import { useGoGame } from '../../composables/useGoGame'
 import { useTheme } from '../../composables/useTheme'
 import ConfirmDialog from './ConfirmDialog.vue'
@@ -48,6 +52,11 @@ const {
   preference: themePreference,
   setThemePreference
 } = useTheme()
+const {
+  preference: soundPreference,
+  setPreference: setSoundPreference,
+  playMoveSound
+} = useGameSound()
 
 const fileInput = useTemplateRef<HTMLInputElement>('fileInput')
 const showNewGame = shallowRef(false)
@@ -64,6 +73,13 @@ function handleStartGame(nextSettings: GameSettings): void {
   startNewGame(nextSettings)
   showNewGame.value = false
   showResult.value = false
+}
+
+function handleGameBoardPoint(point: BoardPoint): void {
+  const result = handleBoardPoint(point)
+  if (result) {
+    playMoveSound(result === 'capture')
+  }
 }
 
 function handleResumeGame(): void {
@@ -156,7 +172,7 @@ function openNewGameFromResult(): void {
         <GoBoard
           :snapshot="snapshot"
           :phase="phase"
-          @point="handleBoardPoint"
+          @point="handleGameBoardPoint"
         />
       </div>
 
@@ -169,6 +185,7 @@ function openNewGameFromResult(): void {
         :sgf-move-index="sgfMoveIndex"
         :is-variation="isVariation"
         :theme-preference="themePreference"
+        :sound-preference="soundPreference"
         @pass="pass"
         @undo="undo"
         @resume-play="resumePlay"
@@ -183,6 +200,7 @@ function openNewGameFromResult(): void {
         @return-to-sgf-game="returnToSgfGame"
         @show-result="showResult = true"
         @update-theme="setThemePreference"
+        @update-sound="setSoundPreference"
       />
     </section>
 

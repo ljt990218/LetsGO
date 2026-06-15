@@ -37,6 +37,8 @@ export const DEFAULT_GAME_SETTINGS: GameSettings = {
   komi: 7.5
 }
 
+export type BoardPointResult = 'play' | 'capture' | null
+
 export function useGoGame() {
   const settings = shallowRef<GameSettings>({ ...DEFAULT_GAME_SETTINGS })
   const actions = shallowRef<GameAction[]>([])
@@ -108,30 +110,37 @@ export function useGoGame() {
     notice.value = '新对局已开始'
   }
 
-  function handleBoardPoint(point: BoardPoint): void {
+  function handleBoardPoint(point: BoardPoint): BoardPointResult {
     if (phase.value === 'playing') {
-      playAt(point)
-      return
+      return playAt(point)
     }
 
     if (phase.value === 'scoring') {
       toggleDeadAt(point)
     }
+
+    return null
   }
 
-  function playAt(point: BoardPoint): boolean {
+  function playAt(point: BoardPoint): BoardPointResult {
     if (phase.value !== 'playing') {
-      return false
+      return null
     }
 
     const color = engine.value.currentPlayer()
+    const previousState = engine.value.currentState()
+    const previousCaptures = previousState.blackStonesCaptured
+      + previousState.whiteStonesCaptured
     const accepted = engine.value.playAt(point.y, point.x, { render: false })
 
     if (!accepted) {
       notice.value = '此处不能落子'
-      return false
+      return null
     }
 
+    const nextState = engine.value.currentState()
+    const nextCaptures = nextState.blackStonesCaptured
+      + nextState.whiteStonesCaptured
     actions.value = [
       ...actions.value,
       {
@@ -142,7 +151,7 @@ export function useGoGame() {
       }
     ]
     syncAfterAction()
-    return true
+    return nextCaptures > previousCaptures ? 'capture' : 'play'
   }
 
   function pass(): void {
