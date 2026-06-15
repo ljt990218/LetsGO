@@ -1,0 +1,62 @@
+:root {
+  color: #eee7d8;
+  background: #11120f;
+  font-family:
+    'Noto Serif SC',
+    'Source Han Serif SC',
+    'Songti SC',
+    serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 1120px;
+  background: #11120f;
+}
+
+body {
+  min-width: 1120px;
+  min-height: 100vh;
+  margin: 0;
+  background: #11120f;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+button,
+select {
+  user-select: none;
+}
+
+::selection {
+  background: rgb(200 167 106 / 28%);
+  color: #fff8e8;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid #11120f;
+  border-radius: 10px;
+  background: #48473c;
+}

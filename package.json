@@ -1,0 +1,28 @@
+{
+  "name": "local-go-room",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc -b"
+  },
+  "dependencies": {
+    "@sabaki/sgf": "3.4.7",
+    "tenuki": "0.3.1",
+    "vue": "^3.5.38",
+    "wgo": "3.0.0-alpha.10"
+  },
+  "devDependencies": {
+    "@unocss/reset": "^66.7.2",
+    "@unocss/vite": "^66.7.2",
+    "@vitejs/plugin-vue": "^6.0.7",
+    "typescript": "^6.0.3",
+    "unocss": "^66.7.2",
+    "vite": "^8.0.16",
+    "vue-tsc": "^3.1.4"
+  },
+  "packageManager": "pnpm@11.5.0"
+}
