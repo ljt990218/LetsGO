@@ -12,6 +12,9 @@ const props = defineProps<{
   snapshot: GameSnapshot
   phase: GamePhase
   actions: readonly GameAction[]
+  sgfMoveCount: number | null
+  sgfMoveIndex: number
+  isVariation: boolean
 }>()
 
 const emit = defineEmits<{
@@ -23,6 +26,10 @@ const emit = defineEmits<{
   newGame: []
   importSgf: []
   exportSgf: []
+  goToSgfMove: [moveIndex: number]
+  previousSgfMove: []
+  nextSgfMove: []
+  returnToSgfGame: []
   showResult: []
 }>()
 
@@ -51,6 +58,18 @@ const lastActionLabel = computed(() => {
   return `落子 ${toCoordinate(action.x, action.y)}`
 })
 
+const currentMoveLabel = computed(() => {
+  if (props.isVariation) {
+    return `变化图 · 第 ${props.snapshot.moveNumber} 手`
+  }
+
+  return `第 ${props.snapshot.moveNumber} 手`
+})
+
+function handleSgfMoveInput(event: Event): void {
+  emit('goToSgfMove', Number((event.target as HTMLInputElement).value))
+}
+
 function toCoordinate(x: number, y: number): string {
   const letters = 'ABCDEFGHJKLMNOPQRST'
   return `${letters[x]}${props.settings.boardSize - y}`
@@ -72,10 +91,55 @@ function toCoordinate(x: number, y: number): string {
     <section class="turn-block">
       <div class="turn-line">
         <span class="section-label">此刻</span>
-        <span class="move-count">第 {{ snapshot.moveNumber }} 手</span>
+        <span class="move-count">{{ currentMoveLabel }}</span>
       </div>
       <strong>{{ phaseLabel }}</strong>
       <p>{{ lastActionLabel }}</p>
+    </section>
+
+    <section
+      v-if="sgfMoveCount !== null"
+      class="sgf-review"
+    >
+      <div class="sgf-review-title">
+        <span>棋谱进度</span>
+        <b>{{ sgfMoveIndex }} / {{ sgfMoveCount }}</b>
+      </div>
+      <input
+        class="sgf-slider"
+        type="range"
+        min="0"
+        :max="sgfMoveCount"
+        :value="sgfMoveIndex"
+        aria-label="选择棋谱已下步数"
+        @input="handleSgfMoveInput"
+      >
+      <div class="sgf-review-actions">
+        <button
+          type="button"
+          class="sgf-review-button focus-ring"
+          :disabled="sgfMoveIndex === 0"
+          @click="emit('previousSgfMove')"
+        >
+          上一步
+        </button>
+        <button
+          type="button"
+          class="sgf-review-button focus-ring"
+          :disabled="sgfMoveIndex === sgfMoveCount"
+          @click="emit('nextSgfMove')"
+        >
+          下一步
+        </button>
+        <button
+          type="button"
+          class="sgf-review-button sgf-review-return focus-ring"
+          :disabled="!isVariation"
+          @click="emit('returnToSgfGame')"
+        >
+          回实战
+        </button>
+      </div>
     </section>
 
     <section class="players">
@@ -303,6 +367,66 @@ function toCoordinate(x: number, y: number): string {
 .players {
   display: grid;
   gap: 8px;
+}
+
+.sgf-review {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-top: 1px solid #34362e;
+  border-bottom: 1px solid #34362e;
+  padding: 14px 0;
+}
+
+.sgf-review-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #77776b;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.sgf-review-title b {
+  color: #b9af9d;
+  font-family: Georgia, serif;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.sgf-slider {
+  width: 100%;
+  accent-color: #c8a76a;
+}
+
+.sgf-review-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.sgf-review-button {
+  border: 1px solid #45473d;
+  border-radius: 2px;
+  padding: 7px 4px;
+  color: #969487;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.sgf-review-button:hover:not(:disabled) {
+  border-color: #817a67;
+  color: #eee7d8;
+}
+
+.sgf-review-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.32;
+}
+
+.sgf-review-return {
+  border-color: #756546;
+  color: #c8a76a;
 }
 
 .player-card {

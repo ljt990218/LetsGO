@@ -21,6 +21,9 @@ const {
   snapshot,
   notice,
   pendingSavedGame,
+  sgfActions,
+  sgfMoveIndex,
+  isVariation,
   inspectSavedGame,
   resumeSavedGame,
   discardSavedGame,
@@ -33,6 +36,10 @@ const {
   resign,
   importSgf,
   exportSgf,
+  goToSgfMove,
+  previousSgfMove,
+  nextSgfMove,
+  returnToSgfGame,
   dismissNotice,
   showNotice
 } = useGoGame()
@@ -82,6 +89,13 @@ function triggerImport(): void {
   fileInput.value?.click()
 }
 
+function createSgfFileName(): string {
+  const now = new Date()
+  const pad = (value: number) => String(value).padStart(2, '0')
+
+  return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}-${settings.value.blackName}-${settings.value.whiteName}.sgf`
+}
+
 async function handleFileChange(event: Event): Promise<void> {
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
@@ -108,7 +122,7 @@ function downloadSgf(): void {
   }))
   const link = document.createElement('a')
   link.href = url
-  link.download = 'local-go.sgf'
+  link.download = createSgfFileName()
   link.click()
   URL.revokeObjectURL(url)
 }
@@ -146,6 +160,9 @@ function openNewGameFromResult(): void {
         :snapshot="snapshot"
         :phase="phase"
         :actions="actions"
+        :sgf-move-count="sgfActions?.length ?? null"
+        :sgf-move-index="sgfMoveIndex"
+        :is-variation="isVariation"
         @pass="pass"
         @undo="undo"
         @resume-play="resumePlay"
@@ -154,6 +171,10 @@ function openNewGameFromResult(): void {
         @new-game="showNewGame = true"
         @import-sgf="triggerImport"
         @export-sgf="downloadSgf"
+        @go-to-sgf-move="goToSgfMove"
+        @previous-sgf-move="previousSgfMove"
+        @next-sgf-move="nextSgfMove"
+        @return-to-sgf-game="returnToSgfGame"
         @show-result="showResult = true"
       />
     </section>
@@ -310,7 +331,7 @@ function openNewGameFromResult(): void {
 .notice-toast {
   position: fixed;
   z-index: 80;
-  bottom: 24px;
+  top: 24px;
   left: 50%;
   display: flex;
   min-width: 320px;
@@ -344,6 +365,6 @@ function openNewGameFromResult(): void {
 .toast-enter-from,
 .toast-leave-to {
   opacity: 0;
-  transform: translate(-50%, 12px);
+  transform: translate(-50%, -12px);
 }
 </style>

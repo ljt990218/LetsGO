@@ -1,6 +1,7 @@
 import {
   readonly,
-  shallowRef
+  shallowRef,
+  watch
 } from 'vue'
 import type {
   BoardPoint,
@@ -43,8 +44,21 @@ export function useGoGame() {
   const result = shallowRef<GameResult | null>(null)
   const notice = shallowRef('')
   const pendingSavedGame = shallowRef<PersistedGame | null>(null)
+  const sgfActions = shallowRef<GameAction[] | null>(null)
+  const sgfMoveIndex = shallowRef(0)
+  const isVariation = shallowRef(false)
+  const variationStartMoveIndex = shallowRef<number | null>(null)
   const engine = shallowRef<GameEngine>(createGameEngine(settings.value))
   const snapshot = shallowRef<GameSnapshot>(createSnapshot())
+
+  watch(notice, (message, _, onCleanup) => {
+    if (!message) {
+      return
+    }
+
+    const timer = window.setTimeout(dismissNotice, 3000)
+    onCleanup(() => window.clearTimeout(timer))
+  })
 
   function inspectSavedGame(): boolean {
     const stored = readPersistedGame()
@@ -89,6 +103,7 @@ export function useGoGame() {
     phase.value = 'playing'
     result.value = null
     pendingSavedGame.value = null
+    clearSgfReview()
     syncAndPersist()
     notice.value = '新对局已开始'
   }
@@ -126,7 +141,7 @@ export function useGoGame() {
         y: point.y
       }
     ]
-    syncAndPersist()
+    syncAfterAction()
     return true
   }
 
@@ -148,7 +163,7 @@ export function useGoGame() {
       }
     ]
     phase.value = engine.value.isOver() ? 'scoring' : 'playing'
-    syncAndPersist()
+    syncAfterAction()
 
     if (phase.value === 'scoring') {
       notice.value = '双方连续停一手，请标记死子后确认数子'
@@ -163,7 +178,7 @@ export function useGoGame() {
 
     engine.value.undo()
     actions.value = actions.value.slice(0, -1)
-    syncAndPersist()
+    syncAfterAction()
   }
 
   function resumePlay(): void {
@@ -224,6 +239,10 @@ export function useGoGame() {
       phase.value = 'playing'
       result.value = null
       pendingSavedGame.value = null
+      sgfActions.value = [...parsed.actions]
+      sgfMoveIndex.value = parsed.actions.length
+      isVariation.value = false
+      variationStartMoveIndex.value = null
       syncAndPersist()
       notice.value = '已载入 SGF 主线，可从末手继续对弈'
       return true
@@ -234,7 +253,48 @@ export function useGoGame() {
   }
 
   function exportSgf(): string {
-    return stringifySgfGame(settings.value, actions.value, result.value)
+    return stringifySgfGame(
+      settings.value,
+      sgfActions.value ?? actions.value,
+      isSgfReviewPosition() ? null : result.value
+    )
+  }
+
+  function goToSgfMove(moveIndex: number): void {
+    if (!sgfActions.value) {
+      return
+    }
+
+    const nextIndex = Math.min(
+      Math.max(Math.trunc(moveIndex), 0),
+      sgfActions.value.length
+    )
+
+    engine.value = replayGame(settings.value, sgfActions.value.slice(0, nextIndex))
+    actions.value = sgfActions.value.slice(0, nextIndex)
+    sgfMoveIndex.value = nextIndex
+    isVariation.value = false
+    variationStartMoveIndex.value = null
+    phase.value = 'playing'
+    result.value = null
+    snapshot.value = createSnapshot()
+  }
+
+  function previousSgfMove(): void {
+    goToSgfMove(sgfMoveIndex.value - 1)
+  }
+
+  function nextSgfMove(): void {
+    goToSgfMove(sgfMoveIndex.value + 1)
+  }
+
+  function returnToSgfGame(): void {
+    if (!sgfActions.value || variationStartMoveIndex.value === null) {
+      return
+    }
+
+    goToSgfMove(variationStartMoveIndex.value)
+    notice.value = '已回到试下前的实战位置'
   }
 
   function dismissNotice(): void {
@@ -273,6 +333,7 @@ export function useGoGame() {
     actions.value = [...saved.actions]
     phase.value = saved.phase
     result.value = saved.result
+    clearSgfReview()
     snapshot.value = createSnapshot()
   }
 
@@ -287,6 +348,10 @@ export function useGoGame() {
 
   function syncAndPersist(): void {
     snapshot.value = createSnapshot()
+
+    if (isSgfReviewPosition()) {
+      return
+    }
 
     const saveError = writePersistedGame({
       version: 1,
@@ -303,6 +368,40 @@ export function useGoGame() {
     }
   }
 
+  function syncAfterAction(): void {
+    if (!sgfActions.value) {
+      syncAndPersist()
+      return
+    }
+
+    if (isVariation.value || sgfMoveIndex.value < sgfActions.value.length) {
+      if (!isVariation.value) {
+        variationStartMoveIndex.value = sgfMoveIndex.value
+      }
+
+      isVariation.value = true
+      snapshot.value = createSnapshot()
+      return
+    }
+
+    sgfActions.value = [...actions.value]
+    sgfMoveIndex.value = sgfActions.value.length
+    syncAndPersist()
+  }
+
+  function clearSgfReview(): void {
+    sgfActions.value = null
+    sgfMoveIndex.value = 0
+    isVariation.value = false
+    variationStartMoveIndex.value = null
+  }
+
+  function isSgfReviewPosition(): boolean {
+    const mainline = sgfActions.value
+    return mainline !== null
+      && (isVariation.value || sgfMoveIndex.value < mainline.length)
+  }
+
   return {
     settings: readonly(settings),
     actions: readonly(actions),
@@ -311,6 +410,9 @@ export function useGoGame() {
     snapshot: readonly(snapshot),
     notice: readonly(notice),
     pendingSavedGame: readonly(pendingSavedGame),
+    sgfActions: readonly(sgfActions),
+    sgfMoveIndex: readonly(sgfMoveIndex),
+    isVariation: readonly(isVariation),
     inspectSavedGame,
     resumeSavedGame,
     discardSavedGame,
@@ -323,6 +425,10 @@ export function useGoGame() {
     resign,
     importSgf,
     exportSgf,
+    goToSgfMove,
+    previousSgfMove,
+    nextSgfMove,
+    returnToSgfGame,
     dismissNotice,
     showNotice
   }
