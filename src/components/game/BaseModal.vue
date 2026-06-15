@@ -64,9 +64,7 @@ const emit = defineEmits<{
   display: grid;
   place-items: center;
   padding: 32px;
-  background:
-    radial-gradient(circle at 50% 30%, rgb(40 42 34 / 42%), transparent 42%),
-    rgb(7 8 6 / 84%);
+  background: var(--background-modal-backdrop);
   backdrop-filter: blur(14px);
 }
 
@@ -74,13 +72,10 @@ const emit = defineEmits<{
   position: relative;
   width: min(100%, 500px);
   overflow: hidden;
-  border: 1px solid rgb(200 167 106 / 32%);
+  border: 1px solid var(--color-modal-border);
   border-radius: 4px;
-  background:
-    linear-gradient(145deg, rgb(37 39 32 / 98%), rgb(20 21 17 / 99%));
-  box-shadow:
-    0 32px 90px rgb(0 0 0 / 56%),
-    inset 0 1px rgb(255 255 255 / 4%);
+  background: var(--background-modal-card);
+  box-shadow: var(--shadow-modal);
 }
 
 .modal-card::before {
@@ -89,7 +84,7 @@ const emit = defineEmits<{
   left: 28px;
   width: 64px;
   height: 2px;
-  background: #c8a76a;
+  background: var(--color-accent);
   content: '';
 }
 
@@ -101,8 +96,8 @@ const emit = defineEmits<{
   width: 32px;
   height: 32px;
   place-items: center;
-  border: 1px solid #45463c;
-  color: #aaa694;
+  border: 1px solid var(--color-modal-close-border);
+  color: var(--color-text-secondary);
   font-family: Georgia, serif;
   font-size: 20px;
   transition:
@@ -111,17 +106,17 @@ const emit = defineEmits<{
 }
 
 .modal-close:hover {
-  border-color: #8b7956;
-  color: #f0e8d7;
+  border-color: var(--color-border-hover);
+  color: var(--color-modal-close-hover);
 }
 
 .modal-header {
   padding: 34px 38px 24px;
-  border-bottom: 1px solid #34362e;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .modal-eyebrow {
-  color: #c8a76a;
+  color: var(--color-accent);
   font-family: Georgia, serif;
   font-size: 10px;
   letter-spacing: 0.28em;
@@ -130,7 +125,7 @@ const emit = defineEmits<{
 
 .modal-title {
   margin-top: 9px;
-  color: #f2ecdf;
+  color: var(--color-text-strong);
   font-family: 'Noto Serif SC', 'Songti SC', serif;
   font-size: 28px;
   font-weight: 500;
@@ -139,7 +134,7 @@ const emit = defineEmits<{
 
 .modal-description {
   margin-top: 9px;
-  color: #9d9c8e;
+  color: var(--color-modal-description);
   font-size: 13px;
   line-height: 1.7;
 }

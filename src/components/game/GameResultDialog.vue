@@ -89,14 +89,14 @@ const winnerName = computed(() => {
 }
 
 .result-kicker {
-  color: #8d8c7f;
+  color: var(--color-text-muted);
   font-size: 10px;
   letter-spacing: 0.28em;
 }
 
 .result-hero strong {
   margin-top: 8px;
-  color: #e0bf7e;
+  color: var(--color-accent-strong);
   font-family: 'Noto Serif SC', 'Songti SC', serif;
   font-size: 36px;
   font-weight: 500;
@@ -105,7 +105,7 @@ const winnerName = computed(() => {
 
 .result-hero p {
   margin-top: 8px;
-  color: #b1ae9f;
+  color: var(--color-text-secondary);
   font-size: 13px;
   letter-spacing: 0.12em;
 }
@@ -114,8 +114,8 @@ const winnerName = computed(() => {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   margin-bottom: 24px;
-  border-top: 1px solid #34362e;
-  border-bottom: 1px solid #34362e;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .score-grid div {
@@ -123,17 +123,17 @@ const winnerName = computed(() => {
   align-items: center;
   justify-content: space-between;
   padding: 14px 18px;
-  color: #929185;
+  color: var(--color-text-muted);
   font-size: 11px;
   letter-spacing: 0.1em;
 }
 
 .score-grid div + div {
-  border-left: 1px solid #34362e;
+  border-left: 1px solid var(--color-border);
 }
 
 .score-grid b {
-  color: #eee7d8;
+  color: var(--color-text-primary);
   font-family: Georgia, serif;
   font-size: 20px;
   font-weight: 400;
@@ -154,14 +154,14 @@ const winnerName = computed(() => {
 }
 
 .primary-action {
-  border: 1px solid #c8a76a;
-  background: #c8a76a;
-  color: #171711;
+  border: 1px solid var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-accent-on);
   font-weight: 700;
 }
 
 .secondary-action {
-  border: 1px solid #4b4c42;
-  color: #aaa89c;
+  border: 1px solid var(--color-border-control);
+  color: var(--color-text-secondary);
 }
 </style>

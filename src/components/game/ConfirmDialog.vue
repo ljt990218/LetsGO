@@ -62,22 +62,22 @@ const emit = defineEmits<{
 }
 
 .danger-action {
-  border: 1px solid #9f4e42;
-  background: #7b3c33;
-  color: #f5e6dc;
+  border: 1px solid var(--color-danger-border);
+  background: var(--color-danger-bg);
+  color: var(--color-danger-text);
 }
 
 .danger-action:hover {
-  background: #9a4a3f;
+  background: var(--color-danger-hover);
 }
 
 .secondary-action {
-  border: 1px solid #4b4c42;
-  color: #aaa89c;
+  border: 1px solid var(--color-border-control);
+  color: var(--color-text-secondary);
 }
 
 .secondary-action:hover {
-  border-color: #787566;
-  color: #eee7d8;
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
 }
 </style>

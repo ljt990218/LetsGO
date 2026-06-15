@@ -98,11 +98,7 @@ onBeforeUnmount(() => {
   background:
     linear-gradient(135deg, rgb(255 239 195 / 18%), transparent 18%),
     linear-gradient(145deg, #bd8d51, #a97640);
-  box-shadow:
-    0 35px 80px rgb(0 0 0 / 46%),
-    0 7px 16px rgb(0 0 0 / 44%),
-    inset 0 0 0 8px rgb(68 43 20 / 16%),
-    inset 0 0 35px rgb(255 224 153 / 15%);
+  box-shadow: var(--shadow-board);
 }
 
 .wgo-board-host {
@@ -146,17 +142,17 @@ onBeforeUnmount(() => {
   z-index: 3;
   display: grid;
   gap: 2px;
-  border-left: 2px solid #c8a76a;
-  background: rgb(20 22 18 / 92%);
+  border-left: 2px solid var(--color-accent);
+  background: var(--background-ribbon);
   padding: 12px 16px;
-  color: #a7a596;
+  color: var(--color-ribbon-text);
   font-size: 10px;
   letter-spacing: 0.12em;
-  box-shadow: 0 10px 30px rgb(0 0 0 / 30%);
+  box-shadow: var(--shadow-ribbon);
 }
 
 .scoring-ribbon span {
-  color: #e0bf7e;
+  color: var(--color-accent-hover);
   font-family: 'Noto Serif SC', 'Songti SC', serif;
   font-size: 14px;
   letter-spacing: 0.2em;
@@ -171,8 +167,8 @@ onBeforeUnmount(() => {
   width: 62px;
   height: 62px;
   place-items: center;
-  border: 2px solid #8f3d32;
-  color: #b34f42;
+  border: 2px solid var(--color-brand-border);
+  color: var(--color-brand);
   font-family: 'Noto Serif SC', 'Songti SC', serif;
   font-size: 28px;
   transform: rotate(-8deg);

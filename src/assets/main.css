@@ -1,6 +1,71 @@
 :root {
-  color: #eee7d8;
-  background: #11120f;
+  color-scheme: dark;
+  --color-page-bg: #11120f;
+  --color-text-primary: #eee7d8;
+  --color-text-strong: #f2ecdf;
+  --color-text-secondary: #aaa89c;
+  --color-text-muted: #8f8e82;
+  --color-text-subtle: #77776b;
+  --color-text-faint: #65665c;
+  --color-accent: #c8a76a;
+  --color-accent-hover: #e0bf7e;
+  --color-accent-strong: #daba7a;
+  --color-accent-soft: #b9af9d;
+  --color-accent-on: #171711;
+  --color-border: #34362e;
+  --color-border-control: #4b4d42;
+  --color-border-hover: #817a67;
+  --color-border-active: #8b7854;
+  --color-brand: #a74b3f;
+  --color-brand-border: #8d3f34;
+  --color-danger: #c87467;
+  --color-danger-border: #9f4e42;
+  --color-danger-bg: #7b3c33;
+  --color-danger-hover: #9a4a3f;
+  --color-danger-text: #f5e6dc;
+  --color-focus-offset: #151612;
+  --color-field-bg: #1d1f1a;
+  --background-shell:
+    radial-gradient(circle at 19% 8%, rgb(102 98 68 / 18%), transparent 31%),
+    radial-gradient(circle at 87% 84%, rgb(78 57 34 / 16%), transparent 28%),
+    linear-gradient(145deg, #171914 0%, #10110e 58%, #181712 100%);
+  --background-shell-texture: rgb(255 255 255 / 0.8%);
+  --background-player-card: rgb(255 255 255 / 1.4%);
+  --background-player-active: linear-gradient(90deg, rgb(200 167 106 / 9%), transparent 65%);
+  --background-quiet-action: #171814;
+  --background-quiet-action-hover: #22231d;
+  --background-modal-backdrop:
+    radial-gradient(circle at 50% 30%, rgb(40 42 34 / 42%), transparent 42%),
+    rgb(7 8 6 / 84%);
+  --background-modal-card:
+    linear-gradient(145deg, rgb(37 39 32 / 98%), rgb(20 21 17 / 99%));
+  --background-toast: rgb(28 30 25 / 96%);
+  --background-ribbon: rgb(20 22 18 / 92%);
+  --color-ribbon-text: #a7a596;
+  --color-caption: #737468;
+  --color-caption-strong: #a49d8c;
+  --color-toast-border: #625a48;
+  --color-toast-text: #c7c0b1;
+  --color-modal-border: rgb(200 167 106 / 32%);
+  --color-modal-close-border: #45463c;
+  --color-modal-close-hover: #f0e8d7;
+  --color-modal-description: #9d9c8e;
+  --color-selection-bg: rgb(200 167 106 / 28%);
+  --color-selection-text: #fff8e8;
+  --color-scrollbar: #48473c;
+  --color-ambient-line: rgb(200 167 106 / 24%);
+  --shadow-board:
+    0 35px 80px rgb(0 0 0 / 46%),
+    0 7px 16px rgb(0 0 0 / 44%),
+    inset 0 0 0 8px rgb(68 43 20 / 16%),
+    inset 0 0 35px rgb(255 224 153 / 15%);
+  --shadow-modal:
+    0 32px 90px rgb(0 0 0 / 56%),
+    inset 0 1px rgb(255 255 255 / 4%);
+  --shadow-toast: 0 12px 40px rgb(0 0 0 / 44%);
+  --shadow-ribbon: 0 10px 30px rgb(0 0 0 / 30%);
+  color: var(--color-text-primary);
+  background: var(--color-page-bg);
   font-family:
     'Noto Serif SC',
     'Source Han Serif SC',
@@ -12,20 +77,91 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+:root[data-theme='light'] {
+  color-scheme: light;
+  --color-page-bg: #e9e2d4;
+  --color-text-primary: #37342d;
+  --color-text-strong: #27251f;
+  --color-text-secondary: #655f54;
+  --color-text-muted: #736c60;
+  --color-text-subtle: #82796b;
+  --color-text-faint: #988e7d;
+  --color-accent: #9b7138;
+  --color-accent-hover: #b2874b;
+  --color-accent-strong: #835c2b;
+  --color-accent-soft: #786c5b;
+  --color-accent-on: #fffaf0;
+  --color-border: #cfc4b2;
+  --color-border-control: #b8aa94;
+  --color-border-hover: #8f7a5c;
+  --color-border-active: #a27c49;
+  --color-brand: #9d4338;
+  --color-brand-border: #b0685d;
+  --color-danger: #a94e43;
+  --color-danger-border: #ae665b;
+  --color-danger-bg: #a55347;
+  --color-danger-hover: #bd685b;
+  --color-danger-text: #fff8f2;
+  --color-focus-offset: #f0eadf;
+  --color-field-bg: #f8f3e9;
+  --background-shell:
+    radial-gradient(circle at 19% 8%, rgb(180 143 79 / 15%), transparent 32%),
+    radial-gradient(circle at 87% 84%, rgb(125 91 48 / 10%), transparent 29%),
+    linear-gradient(145deg, #f4f0e7 0%, #e9e2d5 58%, #f0eadf 100%);
+  --background-shell-texture: rgb(71 56 36 / 2.5%);
+  --background-player-card: rgb(255 252 245 / 52%);
+  --background-player-active: linear-gradient(90deg, rgb(155 113 56 / 14%), transparent 72%);
+  --background-quiet-action: #e2d8c8;
+  --background-quiet-action-hover: #d6c8b3;
+  --background-modal-backdrop:
+    radial-gradient(circle at 50% 30%, rgb(255 251 242 / 42%), transparent 42%),
+    rgb(73 65 53 / 46%);
+  --background-modal-card:
+    linear-gradient(145deg, rgb(250 247 239 / 99%), rgb(236 228 215 / 99%));
+  --background-toast: rgb(250 246 237 / 97%);
+  --background-ribbon: rgb(249 244 234 / 96%);
+  --color-ribbon-text: #6d6559;
+  --color-caption: #8b8172;
+  --color-caption-strong: #665e52;
+  --color-toast-border: #b9a588;
+  --color-toast-text: #554e43;
+  --color-modal-border: rgb(143 105 56 / 38%);
+  --color-modal-close-border: #bcae98;
+  --color-modal-close-hover: #302c25;
+  --color-modal-description: #766e62;
+  --color-selection-bg: rgb(155 113 56 / 24%);
+  --color-selection-text: #2f2a23;
+  --color-scrollbar: #aa9c88;
+  --color-ambient-line: rgb(139 100 48 / 22%);
+  --shadow-board:
+    0 28px 64px rgb(91 66 36 / 23%),
+    0 7px 16px rgb(91 66 36 / 18%),
+    inset 0 0 0 8px rgb(68 43 20 / 16%),
+    inset 0 0 35px rgb(255 224 153 / 15%);
+  --shadow-modal:
+    0 32px 90px rgb(66 55 39 / 28%),
+    inset 0 1px rgb(255 255 255 / 54%);
+  --shadow-toast: 0 12px 40px rgb(67 55 39 / 20%);
+  --shadow-ribbon: 0 10px 30px rgb(67 55 39 / 18%);
+}
+
 * {
   box-sizing: border-box;
 }
 
 html {
   min-width: 1120px;
-  background: #11120f;
+  background: var(--color-page-bg);
 }
 
 body {
   min-width: 1120px;
   min-height: 100vh;
   margin: 0;
-  background: #11120f;
+  background: var(--color-page-bg);
+  transition:
+    background 180ms ease,
+    color 180ms ease;
 }
 
 button,
@@ -46,8 +182,8 @@ select {
 }
 
 ::selection {
-  background: rgb(200 167 106 / 28%);
-  color: #fff8e8;
+  background: var(--color-selection-bg);
+  color: var(--color-selection-text);
 }
 
 ::-webkit-scrollbar {
@@ -56,7 +192,7 @@ select {
 }
 
 ::-webkit-scrollbar-thumb {
-  border: 2px solid #11120f;
+  border: 2px solid var(--color-page-bg);
   border-radius: 10px;
-  background: #48473c;
+  background: var(--color-scrollbar);
 }

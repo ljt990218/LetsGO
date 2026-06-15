@@ -89,7 +89,7 @@ function formatSavedAt(value: string | undefined): string {
   display: grid;
   justify-items: center;
   gap: 10px;
-  color: #eee7d8;
+  color: var(--color-text-primary);
   font-family: 'Noto Serif SC', 'Songti SC', serif;
   font-size: 18px;
   letter-spacing: 0.12em;
@@ -113,7 +113,7 @@ function formatSavedAt(value: string | undefined): string {
 }
 
 .saved-versus {
-  color: #777568;
+  color: var(--color-text-subtle);
   font-size: 12px;
 }
 
@@ -122,14 +122,14 @@ function formatSavedAt(value: string | undefined): string {
   justify-content: center;
   gap: 18px;
   margin-bottom: 28px;
-  color: #8f8e82;
+  color: var(--color-text-muted);
   font-size: 11px;
   letter-spacing: 0.1em;
 }
 
 .saved-meta span + span::before {
   margin-right: 18px;
-  color: #57584d;
+  color: var(--color-text-faint);
   content: '·';
 }
 
@@ -152,23 +152,23 @@ function formatSavedAt(value: string | undefined): string {
 }
 
 .primary-action {
-  border: 1px solid #c8a76a;
-  background: #c8a76a;
-  color: #171711;
+  border: 1px solid var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-accent-on);
   font-weight: 700;
 }
 
 .secondary-action {
-  border: 1px solid #4b4c42;
-  color: #aaa89c;
+  border: 1px solid var(--color-border-control);
+  color: var(--color-text-secondary);
 }
 
 .primary-action:hover {
-  background: #e1c080;
+  background: var(--color-accent-hover);
 }
 
 .secondary-action:hover {
-  border-color: #787566;
-  color: #eee7d8;
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
 }
 </style>

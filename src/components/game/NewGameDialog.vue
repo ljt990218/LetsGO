@@ -142,7 +142,7 @@ function submit(): void {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #b8b5a7;
+  color: var(--color-text-secondary);
   font-size: 12px;
   letter-spacing: 0.12em;
 }
@@ -172,25 +172,25 @@ function submit(): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid #34362e;
-  border-bottom: 1px solid #34362e;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
   padding: 14px 0;
-  color: #8f8e82;
+  color: var(--color-text-muted);
   font-size: 11px;
   letter-spacing: 0.1em;
 }
 
 .rule-note b {
-  color: #c8a76a;
+  color: var(--color-accent);
   font-weight: 500;
 }
 
 .primary-action {
-  border: 1px solid #c8a76a;
+  border: 1px solid var(--color-accent);
   border-radius: 2px;
-  background: #c8a76a;
+  background: var(--color-accent);
   padding: 13px 18px;
-  color: #171711;
+  color: var(--color-accent-on);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.22em;
@@ -201,7 +201,7 @@ function submit(): void {
 }
 
 .primary-action:hover {
-  background: #e1c080;
+  background: var(--color-accent-hover);
   transform: translateY(-1px);
 }
 </style>

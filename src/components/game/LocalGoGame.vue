@@ -6,6 +6,7 @@ import {
 } from 'vue'
 import type { GameSettings } from '../../types/go'
 import { useGoGame } from '../../composables/useGoGame'
+import { useTheme } from '../../composables/useTheme'
 import ConfirmDialog from './ConfirmDialog.vue'
 import GameResultDialog from './GameResultDialog.vue'
 import GameSidebar from './GameSidebar.vue'
@@ -43,6 +44,10 @@ const {
   dismissNotice,
   showNotice
 } = useGoGame()
+const {
+  preference: themePreference,
+  setThemePreference
+} = useTheme()
 
 const fileInput = useTemplateRef<HTMLInputElement>('fileInput')
 const showNewGame = shallowRef(false)
@@ -163,6 +168,7 @@ function openNewGameFromResult(): void {
         :sgf-move-count="sgfActions?.length ?? null"
         :sgf-move-index="sgfMoveIndex"
         :is-variation="isVariation"
+        :theme-preference="themePreference"
         @pass="pass"
         @undo="undo"
         @resume-play="resumePlay"
@@ -176,6 +182,7 @@ function openNewGameFromResult(): void {
         @next-sgf-move="nextSgfMove"
         @return-to-sgf-game="returnToSgfGame"
         @show-result="showResult = true"
+        @update-theme="setThemePreference"
       />
     </section>
 
@@ -239,11 +246,11 @@ function openNewGameFromResult(): void {
   min-width: 1120px;
   min-height: 100vh;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 19% 8%, rgb(102 98 68 / 18%), transparent 31%),
-    radial-gradient(circle at 87% 84%, rgb(78 57 34 / 16%), transparent 28%),
-    linear-gradient(145deg, #171914 0%, #10110e 58%, #181712 100%);
-  color: #eee7d8;
+  background: var(--background-shell);
+  color: var(--color-text-primary);
+  transition:
+    background 180ms ease,
+    color 180ms ease;
 }
 
 .local-game-shell::before {
@@ -255,7 +262,7 @@ function openNewGameFromResult(): void {
       102deg,
       transparent 0,
       transparent 42px,
-      rgb(255 255 255 / 0.8%) 43px,
+      var(--background-shell-texture) 43px,
       transparent 44px
     );
   content: '';
@@ -296,13 +303,13 @@ function openNewGameFromResult(): void {
 
 .board-caption span,
 .board-caption p {
-  color: #737468;
+  color: var(--color-caption);
   font-size: 8px;
   letter-spacing: 0.24em;
 }
 
 .board-caption b {
-  color: #a49d8c;
+  color: var(--color-caption-strong);
   font-family: 'Noto Serif SC', 'Songti SC', serif;
   font-size: 11px;
   font-weight: 400;
@@ -313,7 +320,7 @@ function openNewGameFromResult(): void {
   position: absolute;
   z-index: 0;
   width: 1px;
-  background: linear-gradient(transparent, rgb(200 167 106 / 24%), transparent);
+  background: linear-gradient(transparent, var(--color-ambient-line), transparent);
 }
 
 .ambient-line-left {
@@ -338,19 +345,19 @@ function openNewGameFromResult(): void {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  border: 1px solid #625a48;
+  border: 1px solid var(--color-toast-border);
   border-radius: 2px;
-  background: rgb(28 30 25 / 96%);
+  background: var(--background-toast);
   padding: 12px 14px 12px 16px;
-  color: #c7c0b1;
+  color: var(--color-toast-text);
   font-size: 11px;
   letter-spacing: 0.08em;
-  box-shadow: 0 12px 40px rgb(0 0 0 / 44%);
+  box-shadow: var(--shadow-toast);
   transform: translateX(-50%);
 }
 
 .notice-toast b {
-  color: #c8a76a;
+  color: var(--color-accent);
   font-size: 9px;
   font-weight: 500;
 }

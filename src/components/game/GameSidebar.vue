@@ -6,6 +6,7 @@ import type {
   GameSettings,
   GameSnapshot
 } from '../../types/go'
+import type { ThemePreference } from '../../composables/useTheme'
 
 const props = defineProps<{
   settings: GameSettings
@@ -15,6 +16,7 @@ const props = defineProps<{
   sgfMoveCount: number | null
   sgfMoveIndex: number
   isVariation: boolean
+  themePreference: ThemePreference
 }>()
 
 const emit = defineEmits<{
@@ -31,7 +33,17 @@ const emit = defineEmits<{
   nextSgfMove: []
   returnToSgfGame: []
   showResult: []
+  updateTheme: [preference: ThemePreference]
 }>()
+
+const themeOptions: ReadonlyArray<{
+  value: ThemePreference
+  label: string
+}> = [
+  { value: 'light', label: '浅色' },
+  { value: 'dark', label: '深色' },
+  { value: 'system', label: '系统' }
+]
 
 const phaseLabel = computed(() => {
   if (props.phase === 'scoring') {
@@ -275,6 +287,23 @@ function toCoordinate(x: number, y: number): string {
       </button>
     </nav>
 
+    <section class="theme-switcher">
+      <span>界面主题</span>
+      <div class="theme-options">
+        <button
+          v-for="option in themeOptions"
+          :key="option.value"
+          type="button"
+          class="theme-option focus-ring"
+          :class="{ 'theme-option-active': themePreference === option.value }"
+          :aria-pressed="themePreference === option.value"
+          @click="emit('updateTheme', option.value)"
+        >
+          {{ option.label }}
+        </button>
+      </div>
+    </section>
+
     <footer class="sidebar-footer">
       <span>自动保存已开启</span>
       <i />
@@ -289,7 +318,7 @@ function toCoordinate(x: number, y: number): string {
   width: 360px;
   min-height: min(760px, calc(100vh - 64px));
   flex-direction: column;
-  border-left: 1px solid #36382f;
+  border-left: 1px solid var(--color-border);
   padding: 4px 0 0 32px;
   animation: sidebar-arrive 700ms 80ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -299,7 +328,7 @@ function toCoordinate(x: number, y: number): string {
   align-items: center;
   gap: 16px;
   padding-bottom: 24px;
-  border-bottom: 1px solid #34362e;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .brand-mark {
@@ -307,8 +336,8 @@ function toCoordinate(x: number, y: number): string {
   width: 50px;
   height: 50px;
   place-items: center;
-  border: 1px solid #8d3f34;
-  color: #a74b3f;
+  border: 1px solid var(--color-brand-border);
+  color: var(--color-brand);
   font-family: 'Noto Serif SC', 'Songti SC', serif;
   font-size: 25px;
   transform: rotate(-3deg);
@@ -316,7 +345,7 @@ function toCoordinate(x: number, y: number): string {
 
 .brand-kicker,
 .section-label {
-  color: #8f8d7e;
+  color: var(--color-text-muted);
   font-family: Georgia, serif;
   font-size: 9px;
   letter-spacing: 0.28em;
@@ -324,7 +353,7 @@ function toCoordinate(x: number, y: number): string {
 
 .brand-block h1 {
   margin-top: 4px;
-  color: #eee7d8;
+  color: var(--color-text-primary);
   font-family: 'Noto Serif SC', 'Songti SC', serif;
   font-size: 22px;
   font-weight: 500;
@@ -342,7 +371,7 @@ function toCoordinate(x: number, y: number): string {
 }
 
 .move-count {
-  color: #77776b;
+  color: var(--color-text-subtle);
   font-size: 10px;
   letter-spacing: 0.12em;
 }
@@ -350,7 +379,7 @@ function toCoordinate(x: number, y: number): string {
 .turn-block strong {
   display: block;
   margin-top: 8px;
-  color: #daba7a;
+  color: var(--color-accent-strong);
   font-family: 'Noto Serif SC', 'Songti SC', serif;
   font-size: 29px;
   font-weight: 500;
@@ -359,7 +388,7 @@ function toCoordinate(x: number, y: number): string {
 
 .turn-block p {
   margin-top: 5px;
-  color: #77776b;
+  color: var(--color-text-subtle);
   font-size: 11px;
   letter-spacing: 0.08em;
 }
@@ -373,8 +402,8 @@ function toCoordinate(x: number, y: number): string {
   display: grid;
   gap: 10px;
   margin-bottom: 20px;
-  border-top: 1px solid #34362e;
-  border-bottom: 1px solid #34362e;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
   padding: 14px 0;
 }
 
@@ -382,13 +411,13 @@ function toCoordinate(x: number, y: number): string {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #77776b;
+  color: var(--color-text-subtle);
   font-size: 9px;
   letter-spacing: 0.12em;
 }
 
 .sgf-review-title b {
-  color: #b9af9d;
+  color: var(--color-accent-soft);
   font-family: Georgia, serif;
   font-size: 11px;
   font-weight: 400;
@@ -396,7 +425,7 @@ function toCoordinate(x: number, y: number): string {
 
 .sgf-slider {
   width: 100%;
-  accent-color: #c8a76a;
+  accent-color: var(--color-accent);
 }
 
 .sgf-review-actions {
@@ -406,17 +435,17 @@ function toCoordinate(x: number, y: number): string {
 }
 
 .sgf-review-button {
-  border: 1px solid #45473d;
+  border: 1px solid var(--color-border-control);
   border-radius: 2px;
   padding: 7px 4px;
-  color: #969487;
+  color: var(--color-text-muted);
   font-size: 9px;
   letter-spacing: 0.08em;
 }
 
 .sgf-review-button:hover:not(:disabled) {
-  border-color: #817a67;
-  color: #eee7d8;
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
 }
 
 .sgf-review-button:disabled {
@@ -425,8 +454,8 @@ function toCoordinate(x: number, y: number): string {
 }
 
 .sgf-review-return {
-  border-color: #756546;
-  color: #c8a76a;
+  border-color: var(--color-border-active);
+  color: var(--color-accent);
 }
 
 .player-card {
@@ -435,9 +464,9 @@ function toCoordinate(x: number, y: number): string {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 12px;
-  border: 1px solid #3c3e35;
+  border: 1px solid var(--color-border);
   border-radius: 3px;
-  background: rgb(255 255 255 / 1.4%);
+  background: var(--background-player-card);
   padding: 13px 14px;
   transition:
     border-color 180ms ease,
@@ -446,8 +475,8 @@ function toCoordinate(x: number, y: number): string {
 }
 
 .player-card-active {
-  border-color: #8b7854;
-  background: linear-gradient(90deg, rgb(200 167 106 / 9%), transparent 65%);
+  border-color: var(--color-border-active);
+  background: var(--background-player-active);
   transform: translateX(-5px);
 }
 
@@ -457,7 +486,7 @@ function toCoordinate(x: number, y: number): string {
   bottom: 11px;
   left: -1px;
   width: 2px;
-  background: #c8a76a;
+  background: var(--color-accent);
   content: '';
 }
 
@@ -486,13 +515,13 @@ function toCoordinate(x: number, y: number): string {
 .player-copy span,
 .capture-count span,
 .rule-strip span {
-  color: #77776c;
+  color: var(--color-text-subtle);
   font-size: 9px;
   letter-spacing: 0.14em;
 }
 
 .player-copy strong {
-  color: #d7d1c3;
+  color: var(--color-text-primary);
   font-family: 'Noto Serif SC', 'Songti SC', serif;
   font-size: 15px;
   font-weight: 500;
@@ -506,7 +535,7 @@ function toCoordinate(x: number, y: number): string {
 }
 
 .capture-count b {
-  color: #b9af9d;
+  color: var(--color-accent-soft);
   font-family: Georgia, serif;
   font-size: 16px;
   font-weight: 400;
@@ -516,8 +545,8 @@ function toCoordinate(x: number, y: number): string {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   margin-top: 20px;
-  border-top: 1px solid #34362e;
-  border-bottom: 1px solid #34362e;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .rule-strip div {
@@ -527,12 +556,12 @@ function toCoordinate(x: number, y: number): string {
 }
 
 .rule-strip div + div {
-  border-left: 1px solid #34362e;
+  border-left: 1px solid var(--color-border);
   padding-left: 12px;
 }
 
 .rule-strip b {
-  color: #aaa798;
+  color: var(--color-text-secondary);
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -559,25 +588,25 @@ function toCoordinate(x: number, y: number): string {
 }
 
 .control-primary {
-  border: 1px solid #c8a76a;
-  background: #c8a76a;
-  color: #171711;
+  border: 1px solid var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-accent-on);
   font-weight: 700;
 }
 
 .control-primary:hover {
-  background: #e0bf7e;
+  background: var(--color-accent-hover);
   transform: translateY(-1px);
 }
 
 .control-secondary {
-  border: 1px solid #4b4d42;
-  color: #aaa89b;
+  border: 1px solid var(--color-border-control);
+  color: var(--color-text-secondary);
 }
 
 .control-secondary:hover:not(:disabled) {
-  border-color: #817a67;
-  color: #eee7d8;
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
 }
 
 .control-secondary:disabled {
@@ -590,13 +619,13 @@ function toCoordinate(x: number, y: number): string {
   grid-template-columns: repeat(2, 1fr);
   gap: 1px;
   margin-top: 20px;
-  background: #34362e;
+  background: var(--color-border);
 }
 
 .quiet-action {
-  background: #171814;
+  background: var(--background-quiet-action);
   padding: 10px;
-  color: #8f8e82;
+  color: var(--color-text-muted);
   font-size: 10px;
   letter-spacing: 0.1em;
   transition:
@@ -605,12 +634,53 @@ function toCoordinate(x: number, y: number): string {
 }
 
 .quiet-action:hover {
-  background: #22231d;
-  color: #d5cdbc;
+  background: var(--background-quiet-action-hover);
+  color: var(--color-text-primary);
 }
 
 .quiet-action-danger:hover {
-  color: #c87467;
+  color: var(--color-danger);
+}
+
+.theme-switcher {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  color: var(--color-text-faint);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+
+.theme-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  width: 156px;
+  background: var(--color-border);
+}
+
+.theme-option {
+  background: var(--background-quiet-action);
+  padding: 7px 5px;
+  color: var(--color-text-muted);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.theme-option:hover {
+  background: var(--background-quiet-action-hover);
+  color: var(--color-text-primary);
+}
+
+.theme-option-active,
+.theme-option-active:hover {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
 }
 
 .sidebar-footer {
@@ -619,7 +689,7 @@ function toCoordinate(x: number, y: number): string {
   gap: 9px;
   margin-top: auto;
   padding-top: 24px;
-  color: #65665c;
+  color: var(--color-text-faint);
   font-size: 9px;
   letter-spacing: 0.08em;
 }
@@ -628,7 +698,7 @@ function toCoordinate(x: number, y: number): string {
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: #81775e;
+  background: var(--color-border-hover);
 }
 
 @keyframes sidebar-arrive {
