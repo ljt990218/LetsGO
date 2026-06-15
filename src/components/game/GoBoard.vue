@@ -58,7 +58,6 @@ onBeforeUnmount(() => {
         ref="boardHost"
         class="wgo-board-host"
       />
-      <div class="board-grain" />
     </div>
 
     <div
@@ -82,7 +81,7 @@ onBeforeUnmount(() => {
 .board-stage {
   position: relative;
   display: grid;
-  width: min(72vh, calc(100vw - 470px));
+  width: min(77vh, calc(100vw - 470px));
   min-width: 580px;
   aspect-ratio: 1;
   place-items: center;
@@ -116,23 +115,6 @@ onBeforeUnmount(() => {
 
 .wgo-board-host :deep(> div > div:first-child) {
   border: 0 !important;
-}
-
-.board-grain {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background:
-    repeating-linear-gradient(
-      3deg,
-      transparent 0,
-      transparent 16px,
-      rgb(79 42 14 / 4%) 17px,
-      transparent 19px
-    ),
-    radial-gradient(circle at 22% 18%, rgb(255 239 197 / 10%), transparent 32%);
-  mix-blend-mode: multiply;
 }
 
 .scoring-ribbon {

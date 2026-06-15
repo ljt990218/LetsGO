@@ -306,7 +306,7 @@ function openNewGameFromResult(): void {
 
 .board-caption {
   display: flex;
-  width: min(72vh, calc(100vw - 470px));
+  width: min(77vh, calc(100vw - 470px));
   min-width: 580px;
   align-items: end;
   justify-content: space-between;
