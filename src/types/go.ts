@@ -47,25 +47,25 @@ export interface BoardIntersection extends BoardPoint {
 export interface GameSnapshot {
   currentPlayer: StoneColor
   moveNumber: number
-  intersections: BoardIntersection[]
+  intersections: readonly BoardIntersection[]
   blackCaptures: number
   whiteCaptures: number
   lastMove: PlayAction | null
-  deadPoints: BoardPoint[]
+  deadPoints: readonly BoardPoint[]
   result: GameResult | null
 }
 
 export interface PersistedGame {
   version: 1
   settings: GameSettings
-  actions: GameAction[]
+  actions: readonly GameAction[]
   phase: GamePhase
-  deadPoints: BoardPoint[]
+  deadPoints: readonly BoardPoint[]
   result: GameResult | null
   savedAt: string
 }
 
 export interface ParsedSgfGame {
   settings: GameSettings
-  actions: GameAction[]
+  actions: readonly GameAction[]
 }

@@ -23,8 +23,8 @@ export function createGameEngine(settings: GameSettings): GameEngine {
 
 export function replayGame(
   settings: GameSettings,
-  actions: GameAction[],
-  deadPoints: BoardPoint[] = []
+  actions: readonly GameAction[],
+  deadPoints: readonly BoardPoint[] = []
 ): GameEngine {
   const game = createGameEngine(settings)
 
@@ -54,7 +54,7 @@ export function replayGame(
 
 export function createGameSnapshot(
   game: GameEngine,
-  actions: GameAction[],
+  actions: readonly GameAction[],
   phase: GamePhase,
   result: GameResult | null
 ): GameSnapshot {
@@ -83,7 +83,7 @@ function mapIntersection(point: TenukiPoint) {
   }
 }
 
-function findLastMove(actions: GameAction[]): PlayAction | null {
+function findLastMove(actions: readonly GameAction[]): PlayAction | null {
   for (let index = actions.length - 1; index >= 0; index -= 1) {
     const action = actions[index]
     if (action.type === 'play') {

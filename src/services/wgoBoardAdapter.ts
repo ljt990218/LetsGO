@@ -5,8 +5,8 @@ import {
   SVG_SHADOWS,
   SVGBoard
 } from 'wgo'
-import type { Point } from 'wgo'
 import type {
+  BoardPoint,
   GameSnapshot,
   StoneColor
 } from '../types/go'
@@ -19,7 +19,7 @@ export class WgoBoardAdapter {
   constructor(
     element: HTMLElement,
     size: number,
-    onPoint: (point: Point) => void
+    onPoint: (point: BoardPoint) => void
   ) {
     this.board = new SVGBoard(element, {
       size,
@@ -44,7 +44,7 @@ export class WgoBoardAdapter {
     this.grainElement = this.createGrainElement()
     this.placeGrainBelowStones()
 
-    this.board.on('click', (_event: UIEvent, point: Point | null) => {
+    this.board.on('click', (_event: UIEvent, point: BoardPoint | null) => {
       if (point) {
         onPoint(point)
       }

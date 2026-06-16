@@ -244,7 +244,7 @@ export function useGoGame() {
 
       engine.value = nextGame
       settings.value = parsed.settings
-      actions.value = parsed.actions
+      actions.value = [...parsed.actions]
       phase.value = 'playing'
       result.value = null
       pendingSavedGame.value = null

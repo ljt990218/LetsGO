@@ -56,7 +56,7 @@ export function parseSgfGame(contents: string): ParsedSgfGame {
 
 export function stringifySgfGame(
   settings: GameSettings,
-  actions: GameAction[],
+  actions: readonly GameAction[],
   result: GameResult | null
 ): string {
   const root: SgfNode = {
